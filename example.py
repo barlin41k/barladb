@@ -1,6 +1,7 @@
 from barladb import db #Импортирование функций БД
-from barladb import config #Импортируем конфиг для того чтобы подключить логирование действий
-config.debug = True #Включение логирования
+from barladb import config #Импортируем конфиг для того чтобы подключить дебаг и лог действий
+config.debug = True #Включение дебага
+config.log = True #Включение лога
 
 db = db.BarlaDB()
 data = db.get("example") #Достаем содержимое БД и сохраняем его в переменную data. Заметьте, что мы не пишем расширение (.json)
