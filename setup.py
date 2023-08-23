@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='barladb',
-    version='0.1.7',
+    version='0.2.0',
     description='A very easy local database based on JSON',
     packages=['barladb'],
     author_email='sasaigrypocta@gmail.com',
@@ -10,11 +10,8 @@ setup(
     zip_safe=False,
     long_description='''
 # Изменения:
-- Добавлены новые функции и документация - https://sites.google.com/view/barladb/
-```python
-db.remove_column(filepath, key)
-db.columns(filepath)
-```
+- Структура `db.py` была изменена на класс с функцией `__init__`
+- Удалена зависимость: `colorama`
 
 
 # Что такое barlaDB?
@@ -26,26 +23,22 @@ from barladb import db #Импортирование функций БД
 from barladb import config #Импортируем конфиг для того чтобы подключить логирование действий
 config.debug = True #Включение логирования
 
-#В этом примере уже создан файл БД (example.json)
-#И если вам понадобится в каких то функциях создавать БД с названием, воспользуйтесь
-#db.create(название_БД)
+db = db.BarlaDB()
 data = db.get("example") #Достаем содержимое БД и сохраняем его в переменную data. Заметьте, что мы не пишем расширение (.json)
 #Также, если ваш файл находится в другой папке, всего-лишь требуется прописать другой путь, к примеру
 #db.get("path/to/file/example")
-#Надеюсь, что этот вариант тоже будет работать
-name = data["name"] #Достаём столбец name из example.json (Буду называть дальше это как "БД")
+
+name = data["name"] #Достаём столбец name из example.json
 age = data["age"] #Тоже самое только столбец age
 print(f"Привет, {name}! Тебе {age} лет, верно?!")
 if age > 60:
-    print("Стоп, тебе не может быть >60 лет...")
+    print("Стоп, тебе не может быть больше 60 лет...")
 else:
-    raise SystemExit(1) #Выходим из выполнения кода
-#Поскольку мы сделали выход если <60 лет указано в нашем БД, то остались в программе только >60 лет (По БД, еще раз повторяю)
+    raise SystemExit(1)
+
 print("Сейчас мы поменяем тебе возраст на 18 лет...")
-data["age"] = 18 #Теперь столбец возраста равен 18 лет
-db.save("example", data) #Сохранения данных в БД
-#А дальше уже была другая история...
-#Можно было с помощью db.delete(название_БД) удалить теперь БД, но для этого будет документация, этого всего лишь пример кода))
+data["age"] = 18 #Теперь столбец age равен 18
+db.save("example", data) #Сохранения данных в example.json
 ```
 # Как установить?
 - `pip install barladb`
@@ -56,7 +49,8 @@ db.save("example", data) #Сохранения данных в БД
 - Базирована на всеми известном `JSON`
     ''',
     long_description_content_type="text/markdown",
-    url="https://sites.google.com/view/barladb/",
+    url="https://github.com/barlin41k/barladb",
     project_urls={
         "Documentation": "https://sites.google.com/view/barladb/",
+        "GitHub": "https://github.com/barlin41k/barladb",
     })
