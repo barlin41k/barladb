@@ -55,9 +55,11 @@ class BarlaDB:
                             log.write(f"\n{log_time}: Базы данных {filepath}.json не существует")
             return
     
-    def save(self, filepath: str, data: str, CreateBackup=False):
+    def save(self, filepath: str, data: str, CreateBackup=(False, False)):
         try:
-            if CreateBackup == True:
+            create, return_name = CreateBackup
+            backup_name = None
+            if create:
                 backupData = Json.get(filepath)
                 if not os.path.exists("barladb_backups"):
                     os.makedirs("barladb_backups")
@@ -67,12 +69,14 @@ class BarlaDB:
                         os.makedirs(f"barladb_backups/{backup_time}")
                         current_time = datetime.now()
                         backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
-                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                        backup_name = f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json"
+                        with open(backup_name, "w") as backup:
                             json.dump(data, backup, ensure_ascii=True, indent=2)
                     else:
                         current_time = datetime.now()
                         backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
-                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                        backup_name = f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json"
+                        with open(backup_name, "w") as backup:
                             json.dump(data, backup, ensure_ascii=True, indent=2)
                 else:
                     current_time = datetime.now()
@@ -81,12 +85,14 @@ class BarlaDB:
                         os.makedirs(f"barladb_backups/{backup_time}")
                         current_time = datetime.now()
                         backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
-                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                        backup_name = f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json"
+                        with open(backup_name, "w") as backup:
                             json.dump(data, backup, ensure_ascii=True, indent=2)
                     else:
                         current_time = datetime.now()
                         backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
-                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                        backup_name = f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json"
+                        with open(backup_name, "w") as backup:
                             json.dump(data, backup, ensure_ascii=True, indent=2)
                 if config.debug:
                     print("BarlaDB: " + GREEN + "Бэкап успешно сделан!" + RESET)
@@ -99,6 +105,8 @@ class BarlaDB:
                             log.write(f"{log_time}: Бэкап успешно сделан\n")
                         else:
                             log.write(f"\n{log_time}: Бэкап успешно сделан")
+                if return_name and create:
+                    return backup_name
 
             Json.save(filepath, data)
             if config.debug:
