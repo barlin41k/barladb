@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='barladb',
-    version='0.2.3',
+    version='0.2.37',
     description='A very easy local database based on JSON',
     packages=['barladb'],
     author_email='sasaigrypocta@gmail.com',
@@ -11,16 +11,12 @@ setup(
     long_description='''
 # Изменения:
 ### Обновлена команда `db.save()`:
-- Добавлен третий пункт: `CreateBackup`(`bool`)
-- По дефолту значение `False`
-- Создаёт бэкап файла в директорию `barladb_backups/DD.MM.YY/filename_backup_HH-MM.SS, DD.MM.YY`
-- Тестовая функция, может быть убрана/изменена в будущем
-
-- Исправлены баги
-- Добавлена оптимизация исключений некоторых команд
+- Изменён третий пункт: `CreateBackup(bool, bool)`
+- Первое значение: Создавать ли бэкап `bool`
+- Второе значение: Возращать ли путь до файла бэкапа `bool`
 
 # ToDo
-- Планов не присутсвует
+- Добавить функцию восстановления бэкапа
 
 
 # Что такое barlaDB?
