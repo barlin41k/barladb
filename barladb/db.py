@@ -55,8 +55,51 @@ class BarlaDB:
                             log.write(f"\n{log_time}: Базы данных {filepath}.json не существует")
             return
     
-    def save(self, filepath: str, data: str):
+    def save(self, filepath: str, data: str, CreateBackup=False):
         try:
+            if CreateBackup == True:
+                backupData = Json.get(filepath)
+                if not os.path.exists("barladb_backups"):
+                    os.makedirs("barladb_backups")
+                    current_time = datetime.now()
+                    backup_time = current_time.strftime("%d.%m.%y")
+                    if not os.path.exists(f"barladb_backups/{backup_time}"):
+                        os.makedirs(f"barladb_backups/{backup_time}")
+                        current_time = datetime.now()
+                        backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
+                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                            json.dump(data, backup, ensure_ascii=True, indent=2)
+                    else:
+                        current_time = datetime.now()
+                        backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
+                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                            json.dump(data, backup, ensure_ascii=True, indent=2)
+                else:
+                    current_time = datetime.now()
+                    backup_time = current_time.strftime("%d.%m.%y")
+                    if not os.path.exists(f"barladb_backups/{backup_time}"):
+                        os.makedirs(f"barladb_backups/{backup_time}")
+                        current_time = datetime.now()
+                        backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
+                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                            json.dump(data, backup, ensure_ascii=True, indent=2)
+                    else:
+                        current_time = datetime.now()
+                        backup_time1 = current_time.strftime("%H-%M.%S, %d.%m.%y")
+                        with open(f"barladb_backups/{backup_time}/{filepath}_backup_{backup_time1}.json", "w") as backup:
+                            json.dump(data, backup, ensure_ascii=True, indent=2)
+                if config.debug:
+                    print("BarlaDB: " + GREEN + "Бэкап успешно сделан!" + RESET)
+                if config.log:
+                    current_time = datetime.now()
+                    name = current_time.strftime("%d.%m.%y")
+                    log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                    with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                        if not log.read():
+                            log.write(f"{log_time}: Бэкап успешно сделан\n")
+                        else:
+                            log.write(f"\n{log_time}: Бэкап успешно сделан")
+
             Json.save(filepath, data)
             if config.debug:
                 print("BarlaDB: " + GREEN + "Данные успешно были обновлены!" + RESET)
@@ -186,53 +229,79 @@ class BarlaDB:
     
     def remove_column(self, filepath: str, key: str):
         answer = Json.remove_column(filepath, key)
-        if answer:
-            print("BarlaDB: " + GREEN + f"Был успешно удален столбец: {key}" + RESET)
+        try:
+            if answer:
+                print("BarlaDB: " + GREEN + f"Был успешно удален столбец: {key}" + RESET)
+                if config.log:
+                        current_time = datetime.now()
+                        name = current_time.strftime("%d.%m.%y")
+                        log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                        with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                            if not log.read():
+                                log.write(f"{log_time}: Был успешно удален столбец: {key}\n")
+                            else:
+                                log.write(f"\n{log_time}: Был успешно удален столбец: {key}")
+            else:
+                print("BarlaDB: " + RED + f"Ошибка при удалении столбца: {key}" + RESET)
+                if config.log:
+                        current_time = datetime.now()
+                        name = current_time.strftime("%d.%m.%y")
+                        log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                        with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                            if not log.read():
+                                log.write(f"{log_time}: Ошибка при удалении столбца: {key}\n")
+                            else:
+                                log.write(f"\n{log_time}: Ошибка при удалении столбца: {key}")
+        except:
+            print("BarlaDB: " + RED + f"Базы данных {filepath}.json не существует!" + RESET)
             if config.log:
                     current_time = datetime.now()
                     name = current_time.strftime("%d.%m.%y")
                     log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
                     with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
                         if not log.read():
-                            log.write(f"{log_time}: Был успешно удален столбец: {key}\n")
+                            log.write(f"{log_time}: Базы данных {filepath}.json не существует\n")
                         else:
-                            log.write(f"\n{log_time}: Был успешно удален столбец: {key}")
-        else:
-            print("BarlaDB: " + RED + f"Ошибка при удалении столбца: {key}" + RESET)
-            if config.log:
-                    current_time = datetime.now()
-                    name = current_time.strftime("%d.%m.%y")
-                    log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
-                    with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
-                        if not log.read():
-                            log.write(f"{log_time}: Ошибка при удалении столбца: {key}\n")
-                        else:
-                            log.write(f"\n{log_time}: Ошибка при удалении столбца: {key}")
+                            log.write(f"\n{log_time}: Базы данных {filepath}.json не существует")
+            return
     
     def columns(self, filepath: str):
-        with open(filepath + ".json", "r") as file:
-            data = json.load(file)
-        int_count = 0
-        str_count = 0
-        for column in data.values():
-            if isinstance(column, (list, tuple, set)):
-                for value in column:
-                    if isinstance(value, int):
-                        int_count += 1
-                    elif isinstance(value, str):
-                        str_count += 1
-            elif isinstance(column, int):
-                int_count += 1
-            elif isinstance(column, str):
-                str_count += 1
-        print("BarlaDB: " + GREEN + f"Твоя БД {filepath}.json имеет: {int_count} интенджеров, {str_count} строк" + RESET)
-        if config.log:
+        try:
+            with open(filepath + ".json", "r") as file:
+                data = json.load(file)
+            int_count = 0
+            str_count = 0
+            for column in data.values():
+                if isinstance(column, (list, tuple, set)):
+                    for value in column:
+                        if isinstance(value, int):
+                            int_count += 1
+                        elif isinstance(value, str):
+                            str_count += 1
+                elif isinstance(column, int):
+                    int_count += 1
+                elif isinstance(column, str):
+                    str_count += 1
+            print("BarlaDB: " + GREEN + f"База данных {filepath}.json имеет: {int_count} интенджеров, {str_count} строк" + RESET)
+            if config.log:
+                        current_time = datetime.now()
+                        name = current_time.strftime("%d.%m.%y")
+                        log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                        with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                            if not log.read():
+                                log.write(f"{log_time}: База данных {filepath}.json имеет: {int_count} интенджеров, {str_count} строк\n")
+                            else:
+                                log.write(f"\n{log_time}: База данных {filepath}.json имеет: {int_count} интенджеров, {str_count} строк")
+            return int_count, str_count
+        except:
+            print("BarlaDB: " + RED + f"Базы данных {filepath}.json не существует!" + RESET)
+            if config.log:
                     current_time = datetime.now()
                     name = current_time.strftime("%d.%m.%y")
                     log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
                     with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
                         if not log.read():
-                            log.write(f"{log_time}: Твоя база данных {filepath}.json имеет: {int_count} интенджеров, {str_count} строк\n")
+                            log.write(f"{log_time}: Базы данных {filepath}.json не существует\n")
                         else:
-                            log.write(f"\n{log_time}: Твоя база данных {filepath}.json имеет: {int_count} интенджеров, {str_count} строк")
-        return int_count, str_count
+                            log.write(f"\n{log_time}: Базы данных {filepath}.json не существует")
+            return
