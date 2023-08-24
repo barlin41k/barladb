@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='barladb',
-    version='0.2.1',
+    version='0.2.3',
     description='A very easy local database based on JSON',
     packages=['barladb'],
     author_email='sasaigrypocta@gmail.com',
@@ -10,16 +10,17 @@ setup(
     zip_safe=False,
     long_description='''
 # Изменения:
-## [БЕТА] Новая функция: Логирование
-- Каждое действие будет записываться каждый день в новый файл log_ДД.ММ.ГГ.txt
-- Как его подключить, можно узнать в лёгком примере использования ниже
-- При ошибках, сообщайте в Discord: **barlin41k**
+### Обновлена команда `db.save()`:
+- Добавлен третий пункт: `CreateBackup`(`bool`)
+- По дефолту значение `False`
+- Создаёт бэкап файла в директорию `barladb_backups/DD.MM.YY/filename_backup_HH-MM.SS, DD.MM.YY`
+- Тестовая функция, может быть убрана/изменена в будущем
 
-- Исправлены баги, недочёты
+- Исправлены баги
+- Добавлена оптимизация исключений некоторых команд
 
 # ToDo
-- Добавить обработку исключений на команды `columns`, `remove_column`, `search`
-- Исправить все возможные недочёты
+- Планов не присутсвует
 
 
 # Что такое barlaDB?
@@ -32,7 +33,7 @@ from barladb import config #Импортируем конфиг для того 
 config.debug = True #Включение дебага
 config.log = True #Включение лога
 
-db = db.BarlaDB()
+db = db.BarlaDB() #Создание экземпляра класса
 data = db.get("example") #Достаем содержимое БД и сохраняем его в переменную data. Заметьте, что мы не пишем расширение (.json)
 #Также, если ваш файл находится в другой папке, всего-лишь требуется прописать другой путь, к примеру
 #db.get("path/to/file/example")
@@ -56,6 +57,11 @@ db.save("example", data) #Сохранения данных в example.json
 - Простота в использовании
 - Очень лёгкий интерфейс
 - Базирована на всеми известном `JSON`
+
+# Ссылки
+- [Documentation](https://sites.google.com/view/barladb/)
+- [Github](https://github.com/barlin41k/barladb/)
+- [PyPi](https://pypi.org/project/barladb/)
     ''',
     long_description_content_type="text/markdown",
     url="https://github.com/barlin41k/barladb",
