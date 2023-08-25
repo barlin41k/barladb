@@ -313,3 +313,60 @@ class BarlaDB:
                         else:
                             log.write(f"\n{log_time}: Базы данных {filepath}.json не существует")
             return
+    
+    def restore_backup(self, BackupFilepath: str, DatabaseFilepath: str, RemoveBackupFile=True):
+            if os.path.exists(BackupFilepath):
+                pass
+            else:
+                print("BarlaDB: " + RED + f"Файла бэкапа не существует. ({BackupFilepath})" + RESET)
+                if config.log:
+                    current_time = datetime.now()
+                    name = current_time.strftime("%d.%m.%y")
+                    log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                    with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                        if not log.read():
+                            log.write(f"{log_time}: Файла бэкапа не существует. ({BackupFilepath})\n")
+                        else:
+                            log.write(f"\n{log_time}: Файла бэкапа не существует. {BackupFilepath}")
+                return
+            if os.path.exists(DatabaseFilepath):
+                pass
+            else:
+                print("BarlaDB: " + RED + f"Файла базы данных не существует. ({DatabaseFilepath})" + RESET)
+                if config.log:
+                    current_time = datetime.now()
+                    name = current_time.strftime("%d.%m.%y")
+                    log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                    with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                        if not log.read():
+                            log.write(f"{log_time}: Файла базы данных не существует. ({DatabaseFilepath})\n")
+                        else:
+                            log.write(f"\n{log_time}: Файла базы данных не существует. ({DatabaseFilepath})")
+                return
+            with open(BackupFilepath, "r") as file:
+                BackupData = json.load(file)
+            with open(DatabaseFilepath, "w") as file:
+                json.dump(BackupData, file, ensure_ascii=True, indent=2)
+            print("BarlaDB: " + GREEN + "Успешный возврат до бэкапа!" + RESET)
+            if config.log:
+                current_time = datetime.now()
+                name = current_time.strftime("%d.%m.%y")
+                log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                    if not log.read():
+                        log.write(f"{log_time}: Успешный возврат до бэкапа\n")
+                    else:
+                        log.write(f"\n{log_time}: Успешный возврат до бэкапа")
+            if RemoveBackupFile:
+                os.remove(BackupFilepath)
+                if config.debug:
+                    print("BarlaDB: " + GREEN + "Файл бэкапа успешно удалён!" + RESET)
+                if config.log:
+                    current_time = datetime.now()
+                    name = current_time.strftime("%d.%m.%y")
+                    log_time = current_time.strftime("%H:%M.%S, %d.%m.%y")
+                    with open(f"log_{name}.txt", "a+", encoding="utf-8") as log:
+                        if not log.read():
+                            log.write(f"{log_time}: Файл бэкапа успешно удалён\n")
+                        else:
+                            log.write(f"\n{log_time}: Файл бэкапа успешно удалён")
