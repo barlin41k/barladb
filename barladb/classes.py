@@ -26,4 +26,4 @@ class Json:
             else:
                 return False
         except:
-            print("BarlaDB: " + RED + f"Базы данных {filepath}.json не существует!" + RESET)
+            print("BarlaDB: " + RED + f"База данных {filepath}.json не существует!" + RESET)
