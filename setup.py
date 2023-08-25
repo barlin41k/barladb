@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='barladb',
-    version='0.2.37',
+    version='0.2.41',
     description='A very easy local database based on JSON',
     packages=['barladb'],
     author_email='sasaigrypocta@gmail.com',
@@ -10,13 +10,13 @@ setup(
     zip_safe=False,
     long_description='''
 # Изменения:
-### Обновлена команда `db.save()`:
-- Изменён третий пункт: `CreateBackup(bool, bool)`
-- Первое значение: Создавать ли бэкап `bool`
-- Второе значение: Возращать ли путь до файла бэкапа `bool`
+### Добавлена команда: `db.restore_backup(str, str, bool)`
+- Первый аргумент: путь до бэкапа. Его можно получить при создании бэкапа
+- Второй аргумент: путь до файла, куда восстановить бэкап
+- Третий: удалять ли файл бэкапа, после выполнения команды (По умолчанию: `True`)
 
 # ToDo
-- Добавить функцию восстановления бэкапа
+- Планов не присутствует
 
 
 # Что такое barlaDB?
@@ -29,8 +29,9 @@ from barladb import config #Импортируем конфиг для того 
 config.debug = True #Включение дебага
 config.log = True #Включение лога
 
-db = db.BarlaDB() #Создание экземпляра класса
-data = db.get("example") #Достаем содержимое БД и сохраняем его в переменную data. Заметьте, что мы не пишем расширение (.json)
+barladb = db.BarlaDB() #Создание экземпляра класса
+#Лучше создать переменную с экземпляром класса с названием немного по другому, чтобы не было конфликтов между barladb и данной переменной
+data = barladb.get("example") #Достаем содержимое БД и сохраняем его в переменную data. Заметьте, что мы не пишем расширение (.json)
 #Также, если ваш файл находится в другой папке, всего-лишь требуется прописать другой путь, к примеру
 #db.get("path/to/file/example")
 
@@ -44,7 +45,7 @@ else:
 
 print("Сейчас мы поменяем тебе возраст на 18 лет...")
 data["age"] = 18 #Теперь столбец age равен 18
-db.save("example", data) #Сохранения данных в example.json
+barladb.save("example", data) #Сохранения данных в example.json
 ```
 # Как установить?
 - `pip install barladb`
