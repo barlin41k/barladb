@@ -1,22 +1,21 @@
 from barladb import db #Импортирование функций БД
-from barladb import config #Импортируем конфиг для того чтобы подключить дебаг и лог действий
+from barladb import config #Импортируем конфиг
 config.debug = True #Включение дебага
 config.log = True #Включение лога
 
 barladb = db.BarlaDB() #Создание экземпляра класса
-#Лучше создать переменную с экземпляром класса с названием немного по другому, чтобы не было конфликтов между barladb и данной переменной
-data = barladb.get("example") #Достаем содержимое БД и сохраняем его в переменную data. Заметьте, что мы не пишем расширение (.json)
-#Также, если ваш файл находится в другой папке, всего-лишь требуется прописать другой путь, к примеру
+data = barladb.get("example") #Достаем содержимое БД и сохраняем его в переменную data
+#Также, если ваш файл находится в другой директории:
 #db.get("path/to/file/example")
 
-name = data["name"] #Достаём столбец name из example.json
-age = data["age"] #Тоже самое только столбец age
+name = data["name"]
+age = data["age"]
 print(f"Привет, {name}! Тебе {age} лет, верно?!")
 if age > 60:
     print("Стоп, тебе не может быть больше 60 лет...")
 else:
-    raise SystemExit(1)
+    exit(-1)
 
 print("Сейчас мы поменяем тебе возраст на 18 лет...")
-data["age"] = 18 #Теперь столбец age равен 18
+data["age"] = 18
 barladb.save("example", data) #Сохранения данных в example.json
